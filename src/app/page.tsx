@@ -49,6 +49,7 @@ import {
   Gift,
   Calendar,
   Mail,
+  X,
   Phone,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -70,8 +71,6 @@ import {
 } from "../components/ui/select";
 
 export default function Home() {
- 
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -157,11 +156,9 @@ export default function Home() {
       setFormData({
         name: "",
         email: "",
-        phone: "",
-        address: "",
-        serviceType: "",
+        whatsapp: "",
+        location: "",
         details: "",
-        date: "",
       });
       setFormSubmitted(false);
     }, 2000);
@@ -347,7 +344,7 @@ export default function Home() {
               >
                 {/* Product Image */}
                 <div
-                  className={`h-64 relative overflow-hidden bg-gradient-to-br ${product.color}`}
+                  className={`h-64 relative overflow-hidden bg-gradient-to-br ${product}`}
                 >
                   <img
                     src={product.image}
@@ -384,7 +381,7 @@ export default function Home() {
             <div className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border-b border-white/10 px-6 py-6 flex justify-between items-center">
               <div>
                 <h2 className="text-2xl font-black text-white">
-                  Book {selectedProduct.name}
+                  Book {selectedProduct}
                 </h2>
                 <p className="text-sm text-gray-400 mt-1">
                   Fill in your details below
