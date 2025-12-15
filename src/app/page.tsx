@@ -330,7 +330,7 @@ Details: ${bookingForm.details}`;
     }, 2000);
   };
 
-  const handleSpecialOfferSubmit = async (e) => {
+  const handleSpecialOfferSubmit = async (e:any) => {
     e.preventDefault();
 
     if (contactMethod === "email") {
@@ -484,7 +484,6 @@ Message: ${specialOfferForm.message}`;
               {paginatedProducts.map((product) => (
                 <motion.div
                   key={product.id}
-                  variants={itemVariants}
                   whileHover={{ scale: 1.05, y: -5 }}
                   onClick={() => handleBookNow(product)}
                   className={`bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer group ${
