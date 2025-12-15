@@ -30,6 +30,7 @@ import {
   Share2,
   Volume2,
   VolumeX,
+  Instagram,
 } from "lucide-react";
 
 // Top 5 Christmas Product Images for Home
@@ -146,15 +147,27 @@ const producedProducts = [
   },
   {
     id: 2,
+    title: "Baby photo lamp",
+    customer: "Shilpa",
+    image: "/photo12.jpg",
+  },
+  {
+    id: 3,
     title: "Classic Wooden Ship Replica (3D Printed)",
     customer: "Nithish",
     image: "/ourProduct2.jpg",
   },
   {
-    id: 3,
+    id: 4,
     title: "Baby photo lamp",
     customer: "Anjali",
     image: "/ourProduct3.jpg",
+  },
+  {
+    id: 5,
+    title: "Mercedes-Benz AMG GT 63",
+    customer: "Venkatesh",
+    image: "/ourProduct4.jpg",
   },
 ];
 
@@ -249,13 +262,14 @@ export default function Page() {
     details: "",
   });
 
-  const [specialOfferForm, setSpecialOfferForm] = useState<SpecialOfferFormData>({
-    name: "",
-    email: "",
-    whatsappNumber: "",
-    location: "",
-    message: "",
-  });
+  const [specialOfferForm, setSpecialOfferForm] =
+    useState<SpecialOfferFormData>({
+      name: "",
+      email: "",
+      whatsappNumber: "",
+      location: "",
+      message: "",
+    });
 
   const testimonials = [
     {
@@ -1731,6 +1745,18 @@ Message: ${specialOfferForm.message}`;
                       className="hover:text-white transition"
                     >
                       +91 6366036081
+                    </a>
+                  </li>
+
+                  <li className="flex items-center gap-2">
+                    <Instagram className="w-4 h-4" />
+                    <a
+                      href="https://www.instagram.com/3dshapeart2025?igsh=MWY1OXFvbm1kMTBhZA%3D%3D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition"
+                    >
+                      @3dshapeart
                     </a>
                   </li>
                 </ul>
