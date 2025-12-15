@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState } from "react";
@@ -205,6 +203,30 @@ const sendEmail = async (emailData: any) => {
   }
 };
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  image: string;
+}
+
+interface BookingFormData {
+  productName: string;
+  name: string;
+  email: string;
+  location: string;
+  whatsappNumber: string;
+  details: string;
+}
+
+interface SpecialOfferFormData {
+  name: string;
+  email: string;
+  whatsappNumber: string;
+  location: string;
+  message: string;
+}
+
 export default function Page() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
@@ -213,12 +235,12 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState("grid");
   const [submitted, setSubmitted] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [contactMethod, setContactMethod] = useState("email");
-  const [hoveredVideo, setHoveredVideo] = useState(null);
-  const [mutedVideos, setMutedVideos] = useState({});
+  const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
+  const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
 
-  const [bookingForm, setBookingForm] = useState({
+  const [bookingForm, setBookingForm] = useState<BookingFormData>({
     productName: "",
     name: "",
     email: "",
@@ -227,7 +249,7 @@ export default function Page() {
     details: "",
   });
 
-  const [specialOfferForm, setSpecialOfferForm] = useState({
+  const [specialOfferForm, setSpecialOfferForm] = useState<SpecialOfferFormData>({
     name: "",
     email: "",
     whatsappNumber: "",
@@ -261,7 +283,7 @@ export default function Page() {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedProducts = allProducts.slice(startIndex, endIndex);
 
-  const handleBookNow = (product: any) => {
+  const handleBookNow = (product: Product) => {
     setSelectedProduct(product);
     setBookingForm({
       productName: product.name,
@@ -276,7 +298,7 @@ export default function Page() {
     setBookingModalOpen(true);
   };
 
-  const handleBookingSubmit = async (e: any) => {
+  const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (contactMethod === "email") {
@@ -330,7 +352,7 @@ Details: ${bookingForm.details}`;
     }, 2000);
   };
 
-  const handleSpecialOfferSubmit = async (e:any) => {
+  const handleSpecialOfferSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (contactMethod === "email") {
@@ -385,7 +407,7 @@ Message: ${specialOfferForm.message}`;
     }, 2000);
   };
 
-  const containerVariants = {
+  const containerVariants: any = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -396,7 +418,7 @@ Message: ${specialOfferForm.message}`;
     },
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -484,6 +506,7 @@ Message: ${specialOfferForm.message}`;
               {paginatedProducts.map((product) => (
                 <motion.div
                   key={product.id}
+                  variants={itemVariants}
                   whileHover={{ scale: 1.05, y: -5 }}
                   onClick={() => handleBookNow(product)}
                   className={`bg-white border border-gray-200 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer group ${
@@ -600,7 +623,7 @@ Message: ${specialOfferForm.message}`;
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
                 className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
               >
                 <div className="sticky top-0 flex justify-between items-center p-6 border-b border-gray-200 bg-white">
@@ -829,6 +852,12 @@ Message: ${specialOfferForm.message}`;
                 Produced
               </a>
               <a
+                href="#videos"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Videos
+              </a>
+              <a
                 href="#contact"
                 className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
               >
@@ -880,6 +909,12 @@ Message: ${specialOfferForm.message}`;
                 className="text-gray-700 hover:text-blue-600 font-medium"
               >
                 Produced
+              </a>
+              <a
+                href="#videos"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                Videos
               </a>
               <a
                 href="#contact"
@@ -1164,7 +1199,10 @@ Message: ${specialOfferForm.message}`;
       </section>
 
       {/* YouTube Shorts Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <section
+        id="videos"
+        className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -1259,7 +1297,7 @@ Message: ${specialOfferForm.message}`;
                     </motion.button>
 
                     <div className="absolute bottom-4 left-4 text-white text-xs font-semibold">
-                      {short.views} views
+                      YouTube Shorts
                     </div>
                   </div>
 
@@ -1275,48 +1313,6 @@ Message: ${specialOfferForm.message}`;
                       {short.description}
                     </p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors"
-                      >
-                        <motion.div
-                          whileHover={{ scale: 1.2 }}
-                          whileTap={{
-                            scale: 0.8,
-                            rotate: [0, -20, 20, -20, 20, 0],
-                          }}
-                        >
-                          <Heart size={18} />
-                        </motion.div>
-                        <span className="text-sm font-semibold">
-                          {short.likes}
-                        </span>
-                      </motion.button>
-
-                      <motion.a
-                        href={`https://www.youtube.com/shorts/${short.youtubeId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
-                      >
-                        <MessageCircle size={18} />
-                        <span className="text-sm font-semibold">Comment</span>
-                      </motion.a>
-
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors"
-                      >
-                        <Share2 size={18} />
-                        <span className="text-sm font-semibold">Share</span>
-                      </motion.button>
-                    </div>
-
                     <motion.a
                       href={`https://www.youtube.com/shorts/${short.youtubeId}`}
                       target="_blank"
@@ -1330,15 +1326,6 @@ Message: ${specialOfferForm.message}`;
                     </motion.a>
                   </div>
                 </div>
-
-                <motion.div
-                  className="absolute -z-10 inset-0 bg-gradient-to-r from-red-400/20 to-pink-400/20 rounded-2xl blur-xl"
-                  animate={{
-                    scale: hoveredVideo === short.id ? 1.05 : 1,
-                    opacity: hoveredVideo === short.id ? 1 : 0.5,
-                  }}
-                  transition={{ duration: 0.3 }}
-                ></motion.div>
               </motion.div>
             ))}
           </motion.div>
@@ -1611,7 +1598,7 @@ Message: ${specialOfferForm.message}`;
             <motion.form
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              onSubmit={(e) => {
+              onSubmit={(e: React.FormEvent) => {
                 e.preventDefault();
                 alert("Thank you! We will contact you soon.");
               }}
@@ -1699,8 +1686,8 @@ Message: ${specialOfferForm.message}`;
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="hover:text-white transition">
-                      Special Offers
+                    <a href="#videos" className="hover:text-white transition">
+                      Videos
                     </a>
                   </li>
                 </ul>
@@ -1773,7 +1760,7 @@ Message: ${specialOfferForm.message}`;
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
             >
               <div className="sticky top-0 flex justify-between items-center p-6 border-b border-gray-200 bg-white">
@@ -1974,7 +1961,7 @@ Message: ${specialOfferForm.message}`;
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="bg-gradient-to-br from-red-50 to-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto border-2 border-red-200"
             >
               <div className="sticky top-0 bg-gradient-to-r from-red-500 to-red-600 flex justify-between items-center p-6 text-white">
