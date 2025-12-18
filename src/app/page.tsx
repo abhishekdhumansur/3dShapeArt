@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import emailjs from "@emailjs/browser";
 import {
   Menu,
   X,
@@ -200,19 +201,25 @@ const youtubeShorts = [
 const ITEMS_PER_PAGE = 12;
 
 // Email sending function
-const sendEmail = async (emailData: any) => {
+const sendEmail = async (form: any) => {
   try {
-    const response = await fetch("/api/send-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    await emailjs.send(
+      "service_de4szd9",
+      "template_jvk5lzy",
+      {
+        product_name: form.productName,
+        name: form.name,
+        reply_to: form.email,
+        whatsapp: form.whatsappNumber,
+        location: form.location,
+        message: form.details || "No extra message",
       },
-      body: JSON.stringify(emailData),
-    });
-    return response.ok;
-  } catch (error) {
-    console.error("Email sending failed:", error);
+      "-FkgbxiO1TouDogC9"
+    );
     return true;
+  } catch (err) {
+    console.error("EmailJS Error:", err);
+    return false;
   }
 };
 
@@ -249,7 +256,7 @@ export default function Page() {
   const [viewMode, setViewMode] = useState("grid");
   const [submitted, setSubmitted] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [contactMethod, setContactMethod] = useState("email");
+  const [contactMethod, setContactMethod] = useState("whatsapp");
   const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
   const [mutedVideos, setMutedVideos] = useState<Record<number, boolean>>({});
 
@@ -261,6 +268,7 @@ export default function Page() {
     whatsappNumber: "",
     details: "",
   });
+  const [isSending, setIsSending] = useState(false);
 
   const [specialOfferForm, setSpecialOfferForm] =
     useState<SpecialOfferFormData>({
@@ -307,63 +315,53 @@ export default function Page() {
       whatsappNumber: "",
       details: "",
     });
-    setContactMethod("email");
+    setContactMethod("whatsapp");
     setSubmitted(false);
     setBookingModalOpen(true);
   };
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSending(true);
 
-    if (contactMethod === "email") {
-      await sendEmail({
-        to: bookingForm.email,
-        subject: `Booking Confirmation - ${bookingForm.productName}`,
-        html: `
-          <h2>Booking Confirmation</h2>
-          <p>Thank you for your interest in <strong>${bookingForm.productName}</strong>!</p>
-          <h3>Your Details:</h3>
-          <ul>
-            <li><strong>Name:</strong> ${bookingForm.name}</li>
-            <li><strong>Email:</strong> ${bookingForm.email}</li>
-            <li><strong>WhatsApp:</strong> ${bookingForm.whatsappNumber}</li>
-            <li><strong>Location:</strong> ${bookingForm.location}</li>
-            <li><strong>Details:</strong> ${bookingForm.details}</li>
-          </ul>
-          <p>We will contact you shortly to confirm your booking.</p>
-          <p><strong>Promo Code:</strong> XMAS30 (25% OFF)</p>
-          <hr />
-          <p>Best regards,<br />3D Shape Art Team</p>
-        `,
-      });
-    } else {
-      const whatsappMessage = `Hi, I'm interested in booking "${bookingForm.productName}". 
+    try {
+      if (contactMethod === "email") {
+        await sendEmail(bookingForm);
+      } else {
+        const whatsappMessage = `Hi, I'm interested in booking "${bookingForm.productName}". 
 Name: ${bookingForm.name}
 Email: ${bookingForm.email}
 Location: ${bookingForm.location}
 WhatsApp: ${bookingForm.whatsappNumber}
 Details: ${bookingForm.details}`;
 
-      const encodedMessage = encodeURIComponent(whatsappMessage);
-      window.open(
-        `https://wa.me/916366036081?text=${encodedMessage}`,
-        "_blank"
-      );
-    }
+        window.open(
+          `https://wa.me/916366036081?text=${encodeURIComponent(
+            whatsappMessage
+          )}`,
+          "_blank"
+        );
+      }
 
-    setSubmitted(true);
-    setTimeout(() => {
-      setBookingModalOpen(false);
-      setSubmitted(false);
-      setBookingForm({
-        productName: "",
-        name: "",
-        email: "",
-        location: "",
-        whatsappNumber: "",
-        details: "",
-      });
-    }, 2000);
+      setSubmitted(true);
+
+      setTimeout(() => {
+        setBookingModalOpen(false);
+        setSubmitted(false);
+        setBookingForm({
+          productName: "",
+          name: "",
+          email: "",
+          location: "",
+          whatsappNumber: "",
+          details: "",
+        });
+      }, 2000);
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleSpecialOfferSubmit = async (e: React.FormEvent) => {
@@ -808,13 +806,28 @@ Message: ${specialOfferForm.message}`;
                       </div>
 
                       <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                         type="submit"
-                        className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                        disabled={isSending}
+                        whileHover={!isSending ? { scale: 1.02 } : {}}
+                        whileTap={!isSending ? { scale: 0.98 } : {}}
+                        className={`w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all
+    ${
+      isSending
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-gradient-to-r from-green-500 to-green-600 text-white hover:shadow-lg"
+    }`}
                       >
-                        <Send size={20} />
-                        Submit Booking
+                        {isSending ? (
+                          <>
+                            <span className="animate-spin">⏳</span>
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Send size={20} />
+                            Submit Booking
+                          </>
+                        )}
                       </motion.button>
                     </form>
                   )}
@@ -972,17 +985,16 @@ Message: ${specialOfferForm.message}`;
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-bold leading-tight text-gray-900">
-              3D Printing
+              Custom 3D Printing
               <br />
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Redefined
+                Made Simple
               </span>
             </h1>
 
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Transform your ideas into reality with precision 3D printing.
-              Choose from 30 exclusive Christmas designs. From prototypes to
-              final products, we deliver excellence in every layer.
+              Design. Print. Deliver. High-precision 3D printing for prototypes,
+              gifts, and production-ready parts — fast and reliable.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
