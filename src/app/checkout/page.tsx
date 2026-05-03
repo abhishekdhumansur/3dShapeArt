@@ -12,6 +12,7 @@ export default function CheckoutPage() {
   const { cart, getCartTotal, clearCart } = useStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [completedOrderId, setCompletedOrderId] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -41,6 +42,7 @@ export default function CheckoutPage() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const orderId = generateOrderId();
+    setCompletedOrderId(orderId);
     clearCart();
     setLoading(false);
     setStep(3);
@@ -355,7 +357,7 @@ export default function CheckoutPage() {
             <div className="glass-effect rounded-lg p-6 mb-6">
               <p className="text-sm text-gray-400 mb-2">Order ID</p>
               <p className="text-xl font-bold gradient-text">
-                {generateOrderId()}
+                {completedOrderId}
               </p>
             </div>
             <p className="text-sm text-gray-400">Redirecting to home page...</p>

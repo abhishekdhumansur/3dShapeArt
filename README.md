@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 3D Shape Art
 
-## Getting Started
+Next.js storefront and marketing site for a 3D printing brand, built with the App Router, React 19, Tailwind CSS v4, Framer Motion, and Zustand.
 
-First, run the development server:
+## What this repo contains
+
+- A custom animated landing page at `src/app/page.tsx`
+- A separate product browsing flow at `src/app/products`
+- Cart and checkout flows powered by Zustand in `src/lib/store.ts`
+- Static product and promo data in `src/data/products.ts`
+- Shared UI and product components in `src/components`
+
+## Tech stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Zustand
+- EmailJS
+- Lucide React
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project notes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- The homepage is currently a large self-contained client component with hardcoded showcase data and direct EmailJS/WhatsApp actions.
+- The `/products`, `/cart`, and `/checkout` routes use a different catalog/storefront structure based on `src/data/products.ts`.
+- The API routes under `src/app/api/products` are placeholder responses right now.
+- Pricing, promo codes, and checkout are demo-style and not connected to a real backend or payment provider.
 
-## Learn More
+## Repo guide
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [REPO_OVERVIEW.md](./REPO_OVERVIEW.md) for a fuller walkthrough of the architecture, routes, assets, gaps, and recommended cleanup areas.

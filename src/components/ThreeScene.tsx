@@ -8,6 +8,7 @@ export default function ThreeScene() {
 
   useEffect(() => {
     if (!containerRef.current) return;
+    const container = containerRef.current;
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -21,7 +22,7 @@ export default function ThreeScene() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     // Create geometric shapes
     const geometry1 = new THREE.TorusKnotGeometry(10, 3, 100, 16);
@@ -134,11 +135,13 @@ export default function ThreeScene() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      containerRef.current?.removeChild(renderer.domElement);
+      container.removeChild(renderer.domElement);
       geometry1.dispose();
       geometry2.dispose();
       geometry3.dispose();
       material.dispose();
+      particlesGeometry.dispose();
+      particlesMaterial.dispose();
       renderer.dispose();
     };
   }, []);
