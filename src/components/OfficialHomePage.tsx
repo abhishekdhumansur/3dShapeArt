@@ -34,7 +34,7 @@ const products = [
   {
     title: "Custom Devotional Statue",
     category: "premium" as Category,
-    image: "/WhatsApp Image 2026-05-03 at 4.58.36 PM.jpeg",
+    image: "/new.png",
     note: "Premium custom order",
   },
   {
@@ -88,7 +88,7 @@ const gallery = [
   "/ourProduct3.jpg",
   "/WhatsApp Image 2026-05-03 at 5.35.40 PM.jpeg",
   "/WhatsApp Image 2025-11-23 at 00.18.31_01a7ce99.jpg",
-  "/WhatsApp Image 2026-05-03 at 4.58.36 PM.jpeg",
+  "/new.png",
   "/WhatsApp Image 2026-05-03 at 5.47.43 PM.jpeg",
 ];
 
@@ -329,7 +329,7 @@ export default function OfficialHomePage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5">
               <Image
-                src="/WhatsApp Image 2026-05-03 at 4.58.36 PM.jpeg"
+                src="/new.png"
                 alt="Custom devotional statue design"
                 width={900}
                 height={1200}
@@ -527,7 +527,7 @@ export default function OfficialHomePage() {
                         ? "object-contain bg-[#0d0d10] p-4"
                         : image === "/ourProduct2.jpg"
                           ? "object-cover object-center"
-                          : image === "/WhatsApp Image 2026-05-03 at 4.58.36 PM.jpeg"
+                          : image === "/new.png"
                             ? "object-cover object-top"
                             : "object-cover"
                     }`}

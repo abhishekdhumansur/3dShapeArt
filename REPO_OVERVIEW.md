@@ -2,219 +2,192 @@
 
 ## Summary
 
-This repository is a Next.js 16 application for **3D Shape Art**, a 3D printing and personalized products brand.
+This repository is the official website codebase for **3D Shape Art**, a Bangalore-based custom 3D printing business.
 
-The codebase currently contains **two overlapping product experiences**:
+The current primary experience is a **business-focused landing page** with:
 
-1. A custom, animated, single-page marketing homepage in `src/app/page.tsx`
-2. A more traditional storefront flow using `/products`, `/cart`, and `/checkout`
+- premium homepage design
+- real product/gallery images
+- SEO metadata and structured data
+- WhatsApp and email inquiry flow
+- sections for products, gallery, trust, reviews, and services
 
-That split is the main architectural detail to understand before making further changes.
+The repo still also contains an older storefront/demo flow under `/products`, `/cart`, and `/checkout`.
 
-## Tech stack
+## Current architecture
 
-- Next.js 16 App Router
-- React 19
-- TypeScript
-- Tailwind CSS v4
-- Framer Motion
-- Zustand for cart state
-- EmailJS for inquiry submission
-- Lucide React icons
-- Radix UI and shadcn/ui primitives in `src/components/ui`
-- Three.js dependencies are installed, but the current homepage is the dominant experience
+### Main live-style business experience
 
-## Main folders
+- `src/app/page.tsx`
+  Renders the homepage and injects JSON-LD structured data.
+- `src/components/OfficialHomePage.tsx`
+  Contains the current main website design.
+- `src/app/layout.tsx`
+  Defines:
+  - brand metadata
+  - canonical URL
+  - Open Graph tags
+  - Twitter tags
+  - robots metadata
+  - global fonts
+- `src/app/robots.ts`
+  Generates `robots.txt`
+- `src/app/sitemap.ts`
+  Generates `sitemap.xml`
 
-### `src/app`
+### Older storefront/demo flow
 
-- `layout.tsx`
-  Sets global metadata, icons, and the root page shell.
-- `page.tsx`
-  Main homepage and the biggest single file in the repo. It includes:
-  - hero section
-  - product showcase
-  - portfolio/gallery
-  - YouTube shorts section
-  - contact section
-  - booking modal
-  - EmailJS and WhatsApp submission logic
-- `products/page.tsx`
-  Catalog page with category filter and sort options.
-- `products/[id]/page.tsx`
-  Product detail page with add-to-cart flow and related products.
-- `cart/page.tsx`
-  Wrapper page that renders the cart component.
-- `checkout/page.tsx`
-  Demo checkout flow with shipping/payment steps and simulated order completion.
-- `api/products/*`
-  Placeholder API routes. These do not currently provide real product, cart, or checkout behavior.
+- `src/app/products/page.tsx`
+- `src/app/products/[id]/page.tsx`
+- `src/app/cart/page.tsx`
+- `src/app/checkout/page.tsx`
+- `src/components/Cart.tsx`
+- `src/components/ProductCard.tsx`
+- `src/lib/store.ts`
+- `src/data/products.ts`
 
-### `src/components`
+This flow still exists, but it is visually and structurally separate from the current homepage.
 
-- `Cart.tsx`
-  Renders cart items, promo code handling, totals, and checkout CTA.
-- `ProductCard.tsx`
-  Storefront product card with image, pricing, rating, and add-to-cart action.
-- `ProductGrid.tsx`
-  Featured products grid based on `src/data/products.ts`.
-- Other components such as `Hero.tsx`, `Navbar.tsx`, `Footer.tsx`, `ThreeScene.tsx`, and promo sections exist, but the current homepage is mostly implemented directly inside `src/app/page.tsx`.
-- `ui/*`
-  Reusable UI primitives generated in the shadcn style.
+## Homepage structure
 
-### `src/data`
+The current homepage in `src/components/OfficialHomePage.tsx` includes:
 
-- `products.ts`
-  Static product catalog and promo-code data for the storefront pages.
+- sticky business header with navigation
+- hero section with two featured product images
+- product/category showcase
+- `College project or personal project` placeholder service section
+- trust/why-us section
+- real work gallery
+- highlighted best work images:
+  - `ourProduct2.jpg`
+  - `ourProduct4.jpg`
+- moving testimonial/review section
+- contact and inquiry form
+- footer
 
-### `src/lib`
+## SEO work currently in place
 
-- `types.ts`
-  Core types for products, cart items, promo codes, orders, and addresses.
-- `store.ts`
-  Zustand cart store with subtotal, discount, and total helpers.
-- `utils.ts`
-  Utility helpers like class merging, price formatting, discount calculation, and order ID generation.
+### Metadata
 
-### `public`
+`src/app/layout.tsx` now includes:
 
-- Product photos and brand assets such as `logo.png`, `favicon.ico`, and multiple `photo*.jpg` files.
+- business-focused page title template
+- business description
+- target keywords
+- canonical URL
+- Open Graph data
+- Twitter card data
+- robots directives
 
-## Route map
+### Structured data
 
-- `/`
-  Brand-heavy animated landing page
-- `/products`
-  Product listing page
-- `/products/[id]`
-  Product detail page
-- `/cart`
-  Shopping cart
-- `/checkout`
-  Checkout experience
-- `/api/products`
-  Placeholder endpoint
-- `/api/products/cart`
-  Placeholder endpoint
-- `/api/products/checkout`
-  Placeholder endpoint
+`src/app/page.tsx` includes JSON-LD for:
 
-## State and data flow
+- `Organization`
+- `LocalBusiness`
+- `Service`
 
-### Homepage flow
+### Crawl/index support
 
-The homepage does **not** use the shared product catalog in `src/data/products.ts`.
+- `src/app/robots.ts`
+- `src/app/sitemap.ts`
 
-Instead, it defines local arrays such as:
+## Image/content direction
 
-- `bestProducts`
-- `producedProducts`
-- `youtubeShorts`
-- `testimonials`
+The homepage now uses real files from `public/` instead of the earlier placeholder-heavy direction.
 
-The booking modal on the homepage:
+Important image usage now includes:
 
-- sends email inquiries through EmailJS for email mode
-- opens WhatsApp with a prefilled message for WhatsApp mode
+- `ourProduct2.jpg`
+  featured as one of the strongest showcase images
+- `ourProduct4.jpg`
+  highlighted as best work, but scaled more carefully in the gallery
+- multiple `WhatsApp Image ...` files
+  used for supporting product and gallery cards
 
-### Storefront flow
+The earlier visiting card image was removed from the active homepage design.
 
-The storefront pages use:
+## Fonts and design direction
 
-- `src/data/products.ts` for product data
-- `src/lib/store.ts` for cart state
-- `src/components/ProductCard.tsx` and `src/components/Cart.tsx` for interaction
+The site now uses:
 
-This means the landing page catalog and the storefront catalog are currently **separate systems**.
+- `Manrope`
+- `Space Grotesk`
+- `Cormorant Garamond`
 
-## Important current-state observations
+Visual direction:
 
-### 1. The README was outdated
+- dark premium background
+- warm gold highlights
+- small blue accent use
+- simpler, more official business tone
 
-The original `README.md` was still the default Create Next App template and did not describe the real project.
+## Contact/order flow
 
-### 2. The homepage is monolithic
+The current order/contact flow is frontend-first:
 
-`src/app/page.tsx` is very large and contains:
+- WhatsApp deep links for quick ordering
+- EmailJS form submission for inquiries
 
-- data
-- UI sections
-- modal state
-- form state
-- contact behavior
-- animation config
+This works for both:
 
-It works as the main brand experience, but it will be harder to maintain than the smaller component-based structure used elsewhere.
+- online orders
+- offline/custom order follow-up
 
-### 3. There are two visual systems
+## Public folder notes
 
-The homepage uses a cyan/blue-on-black look, while the storefront components lean more purple/pink and use shared classes like `card`, `btn-primary`, and `glass-effect`.
+`public/` now contains a mix of:
 
-That suggests the project has evolved in two directions and has not yet been unified.
+- legacy brand assets like `logo.png` and `favicon.ico`
+- product/gallery photos
+- newer WhatsApp-exported product images
 
-### 4. API routes are placeholders
+These newer files are now actively used in the homepage.
 
-The files in `src/app/api/products`, `src/app/api/products/cart`, and `src/app/api/products/checkout` currently return simple JSON messages and are not wired into the UI.
+## Current gaps / known limitations
 
-### 5. The checkout is simulated
+### 1. Two parallel product systems still exist
 
-`src/app/checkout/page.tsx` simulates payment with a timeout and does not persist orders or call a real payments backend.
+The repo still contains:
 
-### 6. Promo data is stale
+- the current official homepage business flow
+- the older demo storefront/cart/checkout flow
 
-`src/data/products.ts` includes promo codes with 2024 and early-2025 expiry dates, which are now out of date relative to the current repo date.
+These are not fully unified yet.
 
-### 7. Some text encoding appears broken
+### 2. Backend/API is still mostly placeholder
 
-There are several mojibake-style characters in `src/app/page.tsx` and comments in `layout.tsx`, which usually means some emoji or special characters were saved with the wrong encoding at some point.
+The `src/app/api/products/*` endpoints are still demo responses and are not a real production backend.
 
-### 8. Git status could not be read safely in this environment
+### 3. Checkout is still simulated
 
-The repo currently triggers Git's "dubious ownership" safe-directory warning in this workspace, so Git-based verification was limited during this pass.
+The checkout route remains a demo-style flow and does not create real orders or payments.
 
-## Configuration notes
+### 4. Product data is split
 
-- `next.config.ts`
-  Allows remote images from `images.unsplash.com` and `placeholder.com`
-- `components.json`
-  Confirms shadcn-style aliases and Tailwind/globals paths
-- `tailwind.config.mjs`
-  Contains a basic content scan setup
-- `globals.css`
-  Is minimal and mainly sets the black theme and a small animation utility set
+Homepage content is curated directly in `OfficialHomePage.tsx`, while the older storefront uses `src/data/products.ts`.
 
-## What looks safe to improve next
+## Best files to edit next
 
-### High-value cleanup
-
-- Break `src/app/page.tsx` into smaller section components
-- Unify the homepage product data with `src/data/products.ts`, or intentionally keep them separate and document why
-- Replace placeholder API routes with real handlers or remove them until needed
-- Refresh expired promo codes
-- Normalize the visual design system across homepage and storefront
-- Fix the broken character encoding in visible text/comments
-
-### If this becomes production-ready
-
-- Move product data to a database or CMS
-- Add server-side order creation
-- Integrate a real payment provider
-- Validate booking/contact inputs on the server
-- Store EmailJS/public IDs in environment variables where possible
-- Add tests for store logic and route behavior
-
-## Best entry points for future work
-
-- Start with `src/app/page.tsx` if the goal is homepage or brand/UI work
-- Start with `src/data/products.ts`, `src/lib/store.ts`, and `src/components/ProductCard.tsx` if the goal is e-commerce/catalog work
-- Start with `src/app/layout.tsx` and `src/app/globals.css` if the goal is global branding or metadata updates
+- `src/components/OfficialHomePage.tsx`
+  for homepage UI, gallery, reviews, and services
+- `src/app/layout.tsx`
+  for global SEO and metadata adjustments
+- `src/app/page.tsx`
+  for structured data changes
+- `src/app/sitemap.ts`
+  if more routes/pages are added
+- `src/data/products.ts`
+  if the older storefront flow is still being kept
 
 ## Short takeaway
 
-This repo is already a strong visual prototype with a working frontend flow, but it is currently a blend of:
+This repo is now closest to:
 
-- a custom marketing microsite
-- a demo storefront
-- placeholder backend routes
+- an official business website
+- a visual product portfolio
+- an SEO-ready lead-generation site
 
-The next major improvement should be **unifying those pieces into one consistent product architecture**.
+with an older demo storefront still present in the codebase.
+
+The next major improvement would be **fully unifying the old storefront flow with the current official homepage design and business content**.
